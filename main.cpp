@@ -13,8 +13,13 @@ class Path {
         cout << endl << "Enter the main directory path: ";
         cin >> mainDirPath;
     }
-    string login() {
-        return (mainDirPath + "");
+    ofstream signUp() {
+        ofstream signup(mainDirPath + "/userLog.txt", ios::app);
+        return (signup);
+    }
+    ifstream logIn() {
+        ifstream login(mainDirPath + "/userLog.txt");
+        return (login);
     }
 
     ~Path() {}
@@ -26,29 +31,32 @@ string inpErr = "Invalid input";
 int main() {
     cout << endl << line1;
     Path mdp;
+    
     cout << endl << line2 << "\t";
     int userIn;
     cin >> userIn;
-    getchar();
 
+    cin.ignore(); 
     string usernameL, pwdL, usernameS, pwdS;
     switch(userIn) {
         case 1: // Login
-        cout << endl << "Username: ";
-        getline(cin, usernameL);
-        cout << endl << "Password: ";
-        getline(cin, pwdL);
-        break;
+            cout << endl << "Username: ";
+            cin.ignore(); 
+            getline(cin, usernameL);
+            cout << endl << "Password: ";
+            getline(cin, pwdL);
+            break;
 
-        case 2: //Signup
-        cout << endl << "Username: ";
-        getline(cin, usernameS);
-        cout << endl << "Password: ";
-        getline(cin, pwdS);
-        break;
+        case 2: // Signup
+            cout << endl << "Username: ";
+            cin.ignore(); 
+            getline(cin, usernameS);
+            cout << endl << "Password: ";
+            getline(cin, pwdS);
+            break;
 
         default:
-        cout << inpErr;
+            cout << inpErr;
     }
 
     return 0;
