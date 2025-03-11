@@ -16,10 +16,14 @@ class Path {
     }
     ofstream signUp() {
         ofstream signup(mainDirPath + "/userSign.txt", ios::app);
+        // Add a check here to find if the file is created successfully
+        // Use error messages ie: error handling
         return (signup);
     }
     ifstream logIn() {
         ifstream login(mainDirPath + "/userLog.txt");
+        // Add a check here to find if the file is created successfully
+        // Use error messages ie: error handling
         return (login);
     }
 
@@ -34,6 +38,7 @@ void authenticate(string &name, string &pass, Path &directory) {
     // This function checks for existing user
     string fname = NULL, fpass = NULL;
     ifstream l_file = directory.logIn();
+    // Add error handling if required
     char ch;
     bool matchFound = false;
     while(1) {
@@ -56,6 +61,14 @@ void authenticate(string &name, string &pass, Path &directory) {
         cout << endl << "You are not an existing user, signup first";
         exit(0);
     }
+}
+
+void writeUser(string &name, string &pass, Path &directory) {
+    ofstream file = directory.signUp();
+    // Add error handling if required
+    file.seekp(0, ios::end);
+    file << '\n' << name << '\0' << pass << '\n';
+    cout << endl << "Succesfully created account";
 }
 
 int main() {
@@ -85,6 +98,7 @@ int main() {
             getline(cin, usernameS);
             cout << endl << "Password: ";
             getline(cin, pwdS);
+            writeUser(usernameL, pwdL, mdp);
             break;
 
         default:
