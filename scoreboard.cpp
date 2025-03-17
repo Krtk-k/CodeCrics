@@ -1,6 +1,6 @@
 #include <iostream>
 #include "headerFiles/textStyles.h"
-#include "headerFiles/scorecard.h"
+#include "headerFiles/scoreboard.h"
 #include <vector>
 #include <algorithm>
 
@@ -174,7 +174,7 @@ class BatsmanBowler:public Players{
         /// Function for changing batsman and bowler separately
         
         // Friend Function
-        friend void scorecard(string , BatsmanBowler);
+        friend void scoreboard(string , BatsmanBowler);
 
         ~BatsmanBowler(){}
 };
@@ -184,7 +184,7 @@ int BatsmanBowler::oversThrown = 0;
 int BatsmanBowler::runsScored = 0;
 int BatsmanBowler::wicketsDown = 0;
 
-void scorecard(string inning, BatsmanBowler matchDetails){
+void scoreboard(string inning, BatsmanBowler matchDetails){
 
     int totalTeamPlayers;
     if (inning =="(INNING : 1)"){
@@ -219,7 +219,7 @@ void scorecard(string inning, BatsmanBowler matchDetails){
 
     while (matchDetails.totalOversToBePlayed != matchDetails.oversThrown && matchDetails.wicketsDown != (totalTeamPlayers-1) ){
         
-        cout << endl << BOLD << UNDERLINE << BRIGHT_WHITE << "\t\t\t\t SCORECARD " << RESET <<endl;
+        cout << endl << BOLD << UNDERLINE << BRIGHT_WHITE << "\t\t\t\t SCOREBOARD " << RESET <<endl;
         cout << endl << "\t\t                "<< ORANGE << inning <<RESET<<endl<<endl<<endl;
         cout << "\t\t\t "<< BLUE << matchDetails.tossWinner<<" CHOSE TO "<<matchDetails.choice<<" FIRST" <<RESET<<endl<<endl<<endl<<endl;
         
@@ -262,9 +262,9 @@ void enteringScoringArea(){
 
     BatsmanBowler matchDetails;
     cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"THE MATCH BEGINS !!"<<RESET<<endl<<endl;
-    scorecard("(INNING : 1)",matchDetails);
+    scoreboard("(INNING : 1)",matchDetails);
     cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"INNINGS BREAK !!"<<RESET<<endl<<endl;
-    scorecard("(INNING : 2)",matchDetails);
+    scoreboard("(INNING : 2)",matchDetails);
     cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"MATCH ENDS !!"<<RESET<<endl<<endl;
 
 }
