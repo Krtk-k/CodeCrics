@@ -133,6 +133,11 @@ int findPersonIndex(string username, string password, Path p) {
     return index;
 }
 
+class Viewer : public User {
+    private:
+     
+};
+
 int main() {
     User obj("kartik", "hello", true);
 
