@@ -92,6 +92,8 @@ class BatsmanBowler:public Players{
     string batsman2;
     int b1Runs;
     int b2Runs;
+    int b1Balls;
+    int b2Balls;
     int runsScoredOnThisBall;
     int target;
 
@@ -101,6 +103,7 @@ class BatsmanBowler:public Players{
     int ballsBowled;
     int overs;
     int wickets;
+    int runsGiven;
 
     // STATIC VARIABLES
     static int oversThrown;
@@ -126,10 +129,13 @@ class BatsmanBowler:public Players{
 
             b1Runs = 0;
             b2Runs = 0;
+            b1Balls = 0;
+            b2Balls = 0;
             totalBalls = 6;
             ballsBowled = 0;
             overs = 0;
             wickets = 0;
+            runsGiven = 0;
 
         }
 
@@ -137,14 +143,14 @@ class BatsmanBowler:public Players{
             if (runs%2 == 0 && batsman1==onStrike){
 
                 b1Runs += runs;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : "  <<b1Runs<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
+                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : "  <<b1Runs<<" runs in "<<b1Balls<<" balls"<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
+                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
             }else if (runs%2 == 0 && batsman2==onStrike){
 
                 b2Runs += runs;
-                cout<<"\t  "<<runningEnd<<" : " <<b1Runs<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b2Runs<<RESET<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
+                cout<<"\t  "<<runningEnd<<" : " <<b1Runs<<" runs in "<<b1Balls<<" balls"<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
+                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<RESET<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
             }else if (runs%2 != 0 && batsman1==onStrike){
 
@@ -153,8 +159,8 @@ class BatsmanBowler:public Players{
                 onStrike = runningEnd;
                 runningEnd = temp;
 
-                cout<<"\t  "<<runningEnd<<" : "<<b1Runs<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<<" : " <<b2Runs<<RESET<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
+                cout<<"\t  "<<runningEnd<<" : "<<b1Runs<<" runs in "<<b1Balls<<" balls"<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
+                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<RESET<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
             }else if (runs%2 != 0 && batsman2==onStrike){
 
@@ -163,8 +169,8 @@ class BatsmanBowler:public Players{
                 onStrike = runningEnd;
                 runningEnd = temp;
 
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b1Runs<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
+                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b1Runs<<" runs in "<<b1Balls<<" balls"<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
+                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
             }else{
                 cout<<"ERROR in strikeChange() !!";
@@ -174,6 +180,7 @@ class BatsmanBowler:public Players{
         /// Function for changing batsman and bowler separately
         
         // Friend Function
+        friend void input(BatsmanBowler);
         friend void scoreboard(string , BatsmanBowler);
 
         ~BatsmanBowler(){}
@@ -183,6 +190,11 @@ class BatsmanBowler:public Players{
 int BatsmanBowler::oversThrown = 0;
 int BatsmanBowler::runsScored = 0;
 int BatsmanBowler::wicketsDown = 0;
+
+//Input Function for Taking User Input
+void input(BatsmanBowler matchDetails){
+
+}
 
 void scoreboard(string inning, BatsmanBowler matchDetails){
 
@@ -225,15 +237,15 @@ void scoreboard(string inning, BatsmanBowler matchDetails){
         
         if (inning =="(INNING : 1)"){
             if (matchDetails.choice == "bat"){
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t    "<<matchDetails.tossLoser<<RESET<<endl<<endl;
+                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t\t"<<matchDetails.tossLoser<<RESET<<endl<<endl;
             }else{
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t    "<<matchDetails.tossWinner<<RESET<<endl<<endl;
+                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t\t"<<matchDetails.tossWinner<<RESET<<endl<<endl;
             }
         }else{
             if (matchDetails.choice == "bat"){
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t    "<<matchDetails.tossWinner<<RESET<<endl<<endl;
+                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t\t"<<matchDetails.tossWinner<<RESET<<endl<<endl;
             }else{
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t    "<<matchDetails.tossLoser<<RESET<<endl<<endl;
+                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t\t"<<matchDetails.tossLoser<<RESET<<endl<<endl;
             }
         }
         matchDetails.strikeChange(matchDetails.runsScoredOnThisBall);
@@ -246,8 +258,10 @@ void scoreboard(string inning, BatsmanBowler matchDetails){
             if (matchDetails.runsScored >= matchDetails.target){
                 break;
             }
-
         }
+
+        // Taking User Input for Scoring
+        input(matchDetails);
 // break is Just for trial
 break;
     }
@@ -273,5 +287,5 @@ int main() {
     enteringScoringArea();
 }
 
-// totalTeamPlayers problem to be resolved
+
 // uske baad scoring kaise karni hai wo dekhna
