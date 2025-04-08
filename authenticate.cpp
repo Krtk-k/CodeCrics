@@ -1,4 +1,4 @@
-#include "authenticate.h"
+#include "headerFiles/authenticate.hpp"
 #include <iostream>
 
 using namespace std;
@@ -6,6 +6,9 @@ using namespace std;
 Path::Path() {
     mainDirPath = "mainDir/loginInfo";
 }
+
+Path::~Path(){}
+
 ofstream Path::signUp() {
     ofstream signup(mainDirPath + "/userSign.txt", ios::app);
     // Add a check here to find if the file is created successfully
