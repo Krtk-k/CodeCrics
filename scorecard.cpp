@@ -3,6 +3,8 @@
 #include "headerFiles/scorecard.h"
 #include <vector>
 #include <algorithm>
+#include "playerinfo.hpp"
+
 
 // For TOSS
 #include <cstdlib>
@@ -48,17 +50,23 @@ class Players{
                 cin>>n;
                 cout<<"\nEnter Players (Make sure that the Player is Already Registered)\n\n";
 
-                for(int j = 0;j<n;j++){
-
-                    cout<<"Player "<<j+1<<" : ";
-                    cin>>name;
-                    if (i==0){
+                for (int j = 0; j < n; j++) {
+                    cout << "Player " << j + 1 << " : ";
+                    cin >> name;
+                
+                    if (!isPlayerRegistered(name)) {
+                        cout << "❌ Player not registered. Please enter a valid name.\n";
+                        j--; // Retry the same player number
+                        continue;
+                    }
+                
+                    if (i == 0) {
                         t1players.push_back(name);
-                    }else{
+                    } else {
                         t2players.push_back(name);
                     }
-                    
                 }
+                
                 cout<<endl;
                 cin.ignore();
             }
@@ -133,41 +141,31 @@ class BatsmanBowler:public Players{
 
         }
 
-        void strikeChange(int runs = 0){
-            if (runs%2 == 0 && batsman1==onStrike){
-
+        void strikeChange(int runs = 0) {
+            if (runs % 2 == 0 && batsman1 == onStrike) {
                 b1Runs += runs;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : "  <<b1Runs<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
-
-            }else if (runs%2 == 0 && batsman2==onStrike){
-
+                updateStats(batsman1, b1Runs, 0, 0); // Update batsman1 stats
+            } else if (runs % 2 == 0 && batsman2 == onStrike) {
                 b2Runs += runs;
-                cout<<"\t  "<<runningEnd<<" : " <<b1Runs<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b2Runs<<RESET<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
-
-            }else if (runs%2 != 0 && batsman1==onStrike){
-
+                updateStats(batsman2, b2Runs, 0, 0); // Update batsman2 stats
+            } else if (runs % 2 != 0 && batsman1 == onStrike) {
                 b1Runs += runs;
-                string temp = onStrike;
-                onStrike = runningEnd;
-                runningEnd = temp;
-
-                cout<<"\t  "<<runningEnd<<" : "<<b1Runs<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<<" : " <<b2Runs<<RESET<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
-
-            }else if (runs%2 != 0 && batsman2==onStrike){
-
+                updateStats(batsman1, b1Runs, 0, 0); // Update batsman1 stats
+                swap(onStrike, runningEnd);
+            } else if (runs % 2 != 0 && batsman2 == onStrike) {
                 b2Runs += runs;
-                string temp = onStrike;
-                onStrike = runningEnd;
-                runningEnd = temp;
-
-                cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b1Runs<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
-                cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<"\t\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<endl;
-
-            }else{
-                cout<<"ERROR in strikeChange() !!";
+                updateStats(batsman2, b2Runs, 0, 0); // Update batsman2 stats
+                swap(onStrike, runningEnd);
+            } else {
+                cout << "ERROR in strikeChange() !!";
+            }
+        
+            ballsBowled++;
+            if (ballsBowled == totalBalls) {
+                overs++;
+                oversThrown++;
+                ballsBowled = 0;
+                updateStats(bowler, 0, overs, wickets); // Update bowler stats
             }
         }
 
@@ -187,91 +185,126 @@ int BatsmanBowler::wicketsDown = 0;
 void scorecard(string inning, BatsmanBowler matchDetails){
 
     int totalTeamPlayers;
-    if (inning =="(INNING : 1)"){
-        if (matchDetails.choice == "bat"){
-            if (matchDetails.tossWinner == matchDetails.team1){
-                totalTeamPlayers = matchDetails.t1players.size();
-            }else{
-                totalTeamPlayers = matchDetails.t2players.size();
-            }
-        }else{
-            if (matchDetails.tossLoser == matchDetails.team1){
-                totalTeamPlayers = matchDetails.t1players.size();
-            }else{
-                totalTeamPlayers = matchDetails.t2players.size();
-            }
+    if (inning == "(INNING : 1)") {
+        if (matchDetails.choice == "bat") {
+            totalTeamPlayers = (matchDetails.tossWinner == matchDetails.team1) ? matchDetails.t1players.size() : matchDetails.t2players.size();
+    } else {
+        totalTeamPlayers = (matchDetails.tossLoser == matchDetails.team1) ? matchDetails.t1players.size() : matchDetails.t2players.size();
+    }
+    } else {
+        if (matchDetails.choice == "bat") {
+            totalTeamPlayers = (matchDetails.tossLoser == matchDetails.team1) ? matchDetails.t1players.size() : matchDetails.t2players.size();
+    } else {
+        totalTeamPlayers = (matchDetails.tossWinner == matchDetails.team1) ? matchDetails.t1players.size() : matchDetails.t2players.size();
+    }
+}
+
+    while (matchDetails.totalOversToBePlayed != matchDetails.oversThrown && 
+       matchDetails.wicketsDown != (totalTeamPlayers - 1)) {
+    // Display the scorecard
+    cout << endl << BOLD << UNDERLINE << BRIGHT_WHITE << "\t\t\t\t SCORECARD " << RESET << endl;
+    cout << endl << "\t\t                " << ORANGE << inning << RESET << endl << endl << endl;
+    cout << "\t\t\t " << BLUE << matchDetails.tossWinner << " CHOSE TO " << matchDetails.choice << " FIRST" << RESET << endl << endl << endl << endl;
+
+    if (inning == "(INNING : 1)") {
+        if (matchDetails.choice == "bat") {
+            cout << "\t  " << BOLD << UNDERLINE << BRIGHT_WHITE << matchDetails.tossWinner << "\t\t\t\t\t    " << matchDetails.tossLoser << RESET << endl << endl;
+        } else {
+            cout << "\t  " << BOLD << UNDERLINE << BRIGHT_WHITE << matchDetails.tossLoser << "\t\t\t\t\t    " << matchDetails.tossWinner << RESET << endl << endl;
         }
-    }else{
-        if (matchDetails.choice == "bat"){
-            if (matchDetails.tossLoser == matchDetails.team1){
-                totalTeamPlayers = matchDetails.t1players.size();
-            }else{
-                totalTeamPlayers = matchDetails.t2players.size();
-            }
-        }else{
-            if (matchDetails.tossWinner == matchDetails.team1){
-                totalTeamPlayers = matchDetails.t1players.size();
-            }else{
-                totalTeamPlayers = matchDetails.t2players.size();
-            }
+    } else {
+        if (matchDetails.choice == "bat") {
+            cout << "\t  " << BOLD << UNDERLINE << BRIGHT_WHITE << matchDetails.tossLoser << "\t\t\t\t\t    " << matchDetails.tossWinner << RESET << endl << endl;
+        } else {
+            cout << "\t  " << BOLD << UNDERLINE << BRIGHT_WHITE << matchDetails.tossWinner << "\t\t\t\t\t    " << matchDetails.tossLoser << RESET << endl << endl;
         }
     }
 
-    while (matchDetails.totalOversToBePlayed != matchDetails.oversThrown && matchDetails.wicketsDown != (totalTeamPlayers-1) ){
-        
-        cout << endl << BOLD << UNDERLINE << BRIGHT_WHITE << "\t\t\t\t SCORECARD " << RESET <<endl;
-        cout << endl << "\t\t                "<< ORANGE << inning <<RESET<<endl<<endl<<endl;
-        cout << "\t\t\t "<< BLUE << matchDetails.tossWinner<<" CHOSE TO "<<matchDetails.choice<<" FIRST" <<RESET<<endl<<endl<<endl<<endl;
-        
-        if (inning =="(INNING : 1)"){
-            if (matchDetails.choice == "bat"){
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t    "<<matchDetails.tossLoser<<RESET<<endl<<endl;
-            }else{
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t    "<<matchDetails.tossWinner<<RESET<<endl<<endl;
-            }
-        }else{
-            if (matchDetails.choice == "bat"){
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossLoser<<"\t\t\t\t\t    "<<matchDetails.tossWinner<<RESET<<endl<<endl;
-            }else{
-                cout<<"\t  "<<BOLD<<UNDERLINE<<BRIGHT_WHITE<<matchDetails.tossWinner<<"\t\t\t\t\t    "<<matchDetails.tossLoser<<RESET<<endl<<endl;
-            }
-        }
-        matchDetails.strikeChange(matchDetails.runsScoredOnThisBall);
-        cout<<endl<<endl<<BOLD<<BRIGHT_WHITE<<"\t\t\t\t  RUNS : "<<matchDetails.runsScored<<endl<<endl;
-        cout<<BLUE<<"\t\t\t WICKETS/TOTAL WICKETS : "<<matchDetails.wicketsDown<<"/"<<(totalTeamPlayers-1)<<endl<<endl;
-        cout<<BRIGHT_WHITE<<"\t\t\t   OVERS/TOTAL OVERS : "<<matchDetails.oversThrown<<"/"<<matchDetails.totalOversToBePlayed<<RESET<<endl<<endl;
+    matchDetails.strikeChange(matchDetails.runsScoredOnThisBall);
+    cout << endl << endl << BOLD << BRIGHT_WHITE << "\t\t\t\t  RUNS : " << matchDetails.runsScored << endl << endl;
+    cout << BLUE << "\t\t\t WICKETS/TOTAL WICKETS : " << matchDetails.wicketsDown << "/" << (totalTeamPlayers - 1) << endl << endl;
+    cout << BRIGHT_WHITE << "\t\t\t   OVERS/TOTAL OVERS : " << matchDetails.oversThrown << "/" << matchDetails.totalOversToBePlayed << RESET << endl << endl;
 
-        if (inning == "(INNING : 2)"){
-            cout << "\t\t\t       "<< BG_BRIGHT_YELLOW << "TARGET" <<" : "<<matchDetails.target<<RESET<<endl<<endl;
-            if (matchDetails.runsScored >= matchDetails.target){
-                break;
-            }
+    if (inning == "(INNING : 2)") {
+        cout << "\t\t\t       " << BG_BRIGHT_YELLOW << "TARGET" << " : " << matchDetails.target << RESET << endl << endl;
+        if (matchDetails.runsScored >= matchDetails.target) {
+            break; // End the match if the target is reached
+        }
+    }
+}
 
         }
 // break is Just for trial
 break;
     }
 
-    if (inning == "(INNING : 1)"){
+    if (inning == "(INNING : 1)") {
         matchDetails.target = matchDetails.runsScored;
     }
+    
+    // ✅ Update player stats before leaving the function
+    updateStats(batsman1, b1Runs, 0, 0);
+    updateStats(batsman2, b2Runs, 0, 0);
+    updateStats(bowler, 0, overs, wickets);
+    
 
 }
 
-void enteringScoringArea(){
-
+void enteringScoringArea() {
     BatsmanBowler matchDetails;
-    cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"THE MATCH BEGINS !!"<<RESET<<endl<<endl;
-    scorecard("(INNING : 1)",matchDetails);
-    cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"INNINGS BREAK !!"<<RESET<<endl<<endl;
-    scorecard("(INNING : 2)",matchDetails);
-    cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"MATCH ENDS !!"<<RESET<<endl<<endl;
+    cout << endl << endl << BRIGHT_WHITE << BOLD << "THE MATCH BEGINS !!" << RESET << endl << endl;
+    
+    scorecard("(INNING : 1)", matchDetails);
+    
+    cout << endl << endl << BRIGHT_WHITE << BOLD << "INNINGS BREAK !!" << RESET << endl << endl;
+    
+    scorecard("(INNING : 2)", matchDetails);
+    
+    cout << endl << endl << BRIGHT_WHITE << BOLD << "MATCH ENDS !!" << RESET << endl << endl;
+
+    
+        // ✅ Save updated player stats
+    savePlayerStats();
+
+    // ✅ Fancy Post-Match Stats Menu
+    int option;
+    do {
+        cout << "\n🏏 ----------- Post-Match Stats Menu -----------\n";
+        cout << "1. View a player's stats\n";
+        cout << "2. View all players' stats\n";
+        cout << "3. Exit\n";
+        cout << "Choose an option (1-3): ";
+        cin >> option;
+    
+        switch (option) {
+            case 1: {
+                string lookupName;
+                cout << "\n🔍 Enter player's name: ";
+                cin >> lookupName;
+                printPlayerStats(lookupName);
+                break;
+            }
+            case 2:
+                cout << "\n📊 Showing all player stats:\n";
+                printAllPlayerStats();
+                break;
+            case 3:
+                cout << "\n👋 Exiting post-match stats menu. Thank you for playing!\n";
+                break;
+            default:
+                cout << "\n❌ Invalid option. Please select between 1-3.\n";
+        }
+    } while (option != 3)
 
 }
+
 
 int main() {
-    enteringScoringArea();
+    loadPlayerStats();         // ✅ Load saved stats at the start
+    enteringScoringArea();     // Continue with the match setup and gameplay
+    return 0;
 }
+
 
 // totalTeamPlayers problem to be resolved
 // uske baad scoring kaise karni hai wo dekhna
