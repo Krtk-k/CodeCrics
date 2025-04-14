@@ -1,8 +1,10 @@
 // playerinfo.cpp
 
-#include "playerinfo.h"
+#include "headerFiles/playerinfo.hpp"
 #include <iostream>
 #include <fstream>
+#include <map>
+#include <string>
 using namespace std;
 
 // Actual storage
@@ -63,9 +65,9 @@ void updateStats(const string& name, int runs, int overs, int wickets) {
     stats.overs += overs;
     stats.wickets += wickets;
 
-    if (stats.runs >= 50 && stats.runs < 100 && stats.halfCenturies == 0)
+    if (stats.runs >= 50 && stats.halfCenturies == 0)
         stats.halfCenturies++;
-    else if (stats.runs >= 100 && stats.centuries == 0)
+    if (stats.runs >= 100 && stats.centuries == 0)
         stats.centuries++;
 }
 
@@ -84,7 +86,12 @@ void printPlayerStats(const string& name) {
 }
 
 void printAllPlayerStats() {
-    for (const auto& pair : allPlayersStats) { // Corrected map name
+    if (allPlayersStats.empty()) {
+        cout << "No player stats available." << endl;
+        return;
+    }
+
+    for (const auto& pair : allPlayersStats) {
         const PlayerStats& stats = pair.second;
         cout << "\n👤 Player: " << pair.first
              << "\n🏏 Runs: " << stats.runs
