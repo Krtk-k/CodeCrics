@@ -5,6 +5,15 @@
 
 using namespace std;
 
+// For converting usernames to lowercase
+void toLowerCase(string& name){
+    for(int i = 0;i<name.length();i++){
+        if (name[i]>= 65 && name[i]<=90){
+            name[i] = name[i] + 32;
+        }
+    }
+}
+
 class Path {
     private:
     string mainDirPath;
@@ -24,7 +33,7 @@ class Path {
         // Add a check here to find if the file is created successfully
         // Use error messages ie: error handling
         return (login);
-    }f
+    }
 
     ~Path() {}
 };
@@ -97,6 +106,7 @@ int main() {
         case 1: // Login
             cout << endl << "Username : ";
             getline(cin,username);
+            toLowerCase(username);
             cout << endl << "Password : ";
             getline(cin,pwd);
             authenticate(username, pwd, mdp);
@@ -105,6 +115,7 @@ int main() {
         case 2: // Signup
             cout << endl << "Username : ";
             getline(cin,username);
+            toLowerCase(username);
             cout << endl << "Password : ";
             getline(cin,pwd);
             writeUser(username, pwd, mdp);

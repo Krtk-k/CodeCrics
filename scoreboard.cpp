@@ -10,6 +10,15 @@
 
 using namespace std;
 
+// For converting usernames to lowercase
+void toLowerCase(string& name){
+    for(int i = 0;i<name.length();i++){
+        if (name[i]>= 65 && name[i]<=90){
+            name[i] = name[i] + 32;
+        }
+    }
+}
+
 class Players{
     protected:
 
@@ -44,7 +53,7 @@ class Players{
                 }
                 cin.ignore();
 
-                cout<<"\nEnter Number of Players in TEAM "<<i+1<<" : ";
+                cout<<"\nEnter Number of Players in TEAM "<<teams[i]<<" : ";
                 cin>>n;
                 cout<<"\nEnter Players (Make sure that the Player is Already Registered)\n\n";
 
@@ -52,10 +61,16 @@ class Players{
 
                     cout<<"Player "<<j+1<<" : ";
                     cin>>name;
+                    toLowerCase(name);
                     if (i==0){
                         t1players.push_back(name);
                     }else{
-                        t2players.push_back(name);
+                        if (playerExistsInTeam(name,t1players)){
+                            cout<<BOLD<<BRIGHT_RED<<"Can't add "<<name<<" as "<<name<<" is already in TEAM "<<teams[0]<<RESET<<endl<<endl;
+                        }
+                        else{
+                            t2players.push_back(name);
+                        }
                     }
                     
                 }
@@ -77,6 +92,11 @@ class Players{
             }
 
             cin.ignore();
+        }
+
+        // Checks whether the player entered by the user is in team or not
+        bool playerExistsInTeam(const string& player, const vector<string>& teamPlayers){
+            return find(teamPlayers.begin(), teamPlayers.end(), player) != teamPlayers.end();
         }
 
         ~Players(){}
@@ -488,7 +508,6 @@ int main() {
     enteringScoringArea();
 }
 
+// loop lagana hai kaafi jagah
 // uske baad scoring kaise karni hai wo dekhna
 // jo number choice ke liye input le rahe ho use integer ki jagah char ya string kar sakte hai
-// loop lagana hai kaafi jagah, we can use go-to or while loop
-// validity of players ka function add karna hai
