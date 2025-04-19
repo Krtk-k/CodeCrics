@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
+#include "headerFiles/authenticate.hpp"
 
 using namespace std;
 
@@ -45,7 +47,7 @@ Path user_path;
 
 int findPersonIndex(string username, string pass, Path p);
 
-class User {
+class User { // This should be an abstract class (no instances)
     protected:
     string username;
     string password;
@@ -135,8 +137,43 @@ int findPersonIndex(string username, string password, Path p) {
 
 class Viewer : public User {
     private:
-     
+    Match *match;
 };
+
+class Authors : public User {
+    private:
+    Match match;
+};
+
+class Match{
+    private:
+    string name;
+    ifstream runPtr, batsMen, bowlers;
+    vector<vector<pair<int, int>>> viewVector;
+
+    public:
+    Match(string name) {
+        this->name = name;
+        // Three file pointers pointing to all the files of the match
+        runPtr.open("matches/" + name + "runs");
+        batsMen.open("matches/" + name + "batsMen");
+        bowlers.open("matches/" + name + "bowlers");
+    }
+    ifstream* returnRunPtr() {
+        return &runPtr;
+    }
+    ifstream* returnBatsMenPtr() {
+        return &batsMen;
+    }
+    ifstream* returnBowlersPtr() {
+        return &bowlers;
+    }
+
+    void ini_viewVector() {
+        
+    }
+};
+
 
 int main() {
     User obj("kartik", "hello", true);
