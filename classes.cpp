@@ -111,8 +111,8 @@ class User { // This should be an abstract class (no instances)
 
         r_file.close();
         file.close();
-        // remove("mainDir/loginInfo/userSign.txt");
-        // rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
+        remove("mainDir/loginInfo/userSign.txt");
+        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
     }
 
     // Add more functions if needed
