@@ -28,17 +28,7 @@ class Path {
         return (login);
     }
 
-    ofstream userUpdate() {
-        ofstream file(mainDirPath + "/userSign.txt", ios::app);
-        // Add exception handling
-        return (file);
-    }
 
-    ifstream readUser() {
-        ifstream file(mainDirPath + "/userSign.txt");
-        // Add exception handling
-        return (file);
-    }
 
     ~Path() {}
 };
@@ -136,49 +126,49 @@ int findPersonIndex(string username, string password, Path p) {
     return index;
 }
 
-// class Viewer : public User {
-//     private:
-//     Match *match;
-// };
+class Viewer : public User {
+    private:
+    Match *match;
+};
 
-// class Authors : public User {
-//     private:
-//     Match match;
-// };
+class Authors : public User {
+    private:
+    Match match;
+};
 
-// class Match{
-//     private:
-//     string name;
-//     ifstream runPtr, batsMen, bowlers;
-//     vector<vector<pair<int, int>>> viewVector;
+class Match{
+    private:
+    string name;
+    ifstream runPtr, batsMen, bowlers;
+    vector<vector<pair<int, int>>> viewVector;
 
-//     public:
-//     Match(string name) {
-//         this->name = name;
-//         // Three file pointers pointing to all the files of the match
-//         runPtr.open("matches/" + name + "runs");
-//         batsMen.open("matches/" + name + "batsMen");
-//         bowlers.open("matches/" + name + "bowlers");
-//     }
-//     ifstream* returnRunPtr() {
-//         return &runPtr;
-//     }
-//     ifstream* returnBatsMenPtr() {
-//         return &batsMen;
-//     }
-//     ifstream* returnBowlersPtr() {
-//         return &bowlers;
-//     }
+    public:
+    Match(string name) {
+        this->name = name;
+        // Three file pointers pointing to all the files of the match
+        runPtr.open("matches/" + name + "runs");
+        batsMen.open("matches/" + name + "batsMen");
+        bowlers.open("matches/" + name + "bowlers");
+    }
+    ifstream* returnRunPtr() {
+        return &runPtr;
+    }
+    ifstream* returnBatsMenPtr() {
+        return &batsMen;
+    }
+    ifstream* returnBowlersPtr() {
+        return &bowlers;
+    }
 
-//     void ini_viewVector() {
+    void ini_viewVector() {
         
-//     }
-// };
+    }
+};
 
 
 int main() {
-    User obj("kavi", "hello", true);
+    User obj("kartik", "hello", true);
 
-    obj.change_username("kartik");
+    obj.change_username("kavi");
     return 0;
 }
