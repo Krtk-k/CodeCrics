@@ -2,7 +2,8 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include "headerFiles/authenticate.hpp"
+// #include "headerFiles/authenticate.hpp"
+#include "headerFiles/classes.hpp"
 
 using namespace std;
 
@@ -67,7 +68,7 @@ class User { // This should be an abstract class (no instances)
         // Add exception handling
 
         string line;
-        ifstream r_file = user_path.readUser();
+        ifstream r_file = user_path.logIn();
         ofstream file("mainDir/loginInfo/temp.txt");
         for(int i = 1; i<index; i++) {
             getline(r_file, line);
@@ -85,8 +86,8 @@ class User { // This should be an abstract class (no instances)
 
         r_file.close();
         file.close();
-        // remove("mainDir/loginInfo/userSign.txt");
-        // rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
+        remove("mainDir/loginInfo/userSign.txt");
+        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
     }
 
     void change_password(string pass) {
@@ -94,7 +95,7 @@ class User { // This should be an abstract class (no instances)
         // Add exception handling
 
         string line;
-        ifstream r_file = user_path.readUser();
+        ifstream r_file = user_path.logIn();
         ofstream file("mainDir/loginInfo/temp.txt");
         for(int i = 1; i<index; i++) {
             getline(r_file, line);
@@ -118,7 +119,7 @@ class User { // This should be an abstract class (no instances)
 };
 
 int findPersonIndex(string username, string password, Path p) {
-    ifstream r_file = p.readUser();
+    ifstream r_file = p.logIn();
     int index = 0;
     string line, name, pass;
 
@@ -135,49 +136,49 @@ int findPersonIndex(string username, string password, Path p) {
     return index;
 }
 
-class Viewer : public User {
-    private:
-    Match *match;
-};
+// class Viewer : public User {
+//     private:
+//     Match *match;
+// };
 
-class Authors : public User {
-    private:
-    Match match;
-};
+// class Authors : public User {
+//     private:
+//     Match match;
+// };
 
-class Match{
-    private:
-    string name;
-    ifstream runPtr, batsMen, bowlers;
-    vector<vector<pair<int, int>>> viewVector;
+// class Match{
+//     private:
+//     string name;
+//     ifstream runPtr, batsMen, bowlers;
+//     vector<vector<pair<int, int>>> viewVector;
 
-    public:
-    Match(string name) {
-        this->name = name;
-        // Three file pointers pointing to all the files of the match
-        runPtr.open("matches/" + name + "runs");
-        batsMen.open("matches/" + name + "batsMen");
-        bowlers.open("matches/" + name + "bowlers");
-    }
-    ifstream* returnRunPtr() {
-        return &runPtr;
-    }
-    ifstream* returnBatsMenPtr() {
-        return &batsMen;
-    }
-    ifstream* returnBowlersPtr() {
-        return &bowlers;
-    }
+//     public:
+//     Match(string name) {
+//         this->name = name;
+//         // Three file pointers pointing to all the files of the match
+//         runPtr.open("matches/" + name + "runs");
+//         batsMen.open("matches/" + name + "batsMen");
+//         bowlers.open("matches/" + name + "bowlers");
+//     }
+//     ifstream* returnRunPtr() {
+//         return &runPtr;
+//     }
+//     ifstream* returnBatsMenPtr() {
+//         return &batsMen;
+//     }
+//     ifstream* returnBowlersPtr() {
+//         return &bowlers;
+//     }
 
-    void ini_viewVector() {
+//     void ini_viewVector() {
         
-    }
-};
+//     }
+// };
 
 
 int main() {
-    User obj("kartik", "hello", true);
+    User obj("kavi", "hello", true);
 
-    obj.change_username("kavi");
+    obj.change_username("kartik");
     return 0;
 }

@@ -17,7 +17,7 @@ public:
 };
 
 extern string line1, line2, inpErr;
-void authenticate(string name, string pass, Path directory);
+bool authenticate(string name, string pass, Path directory);
 void writeUser(string name, string pass, Path directory);
 // ifstream readUser();
 // ofstream userUpdate();

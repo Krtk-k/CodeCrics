@@ -31,7 +31,7 @@ ifstream Path::logIn() {
 //     return (file);
 // }
 
-void authenticate(string name, string pass, Path directory){
+bool authenticate(string name, string pass, Path directory){
     ifstream file = directory.logIn();
     string line;
     bool matchFound = false;
@@ -43,8 +43,11 @@ void authenticate(string name, string pass, Path directory){
             string password = line.substr(pos+1,line.length());
             if (password == pass){
                 cout << endl << "LOGIN SUCCESSFUL !! Welcome";
+                file.close();
+                return true;
             }else{
                 cout << endl << "Incorrect Password !!";
+                return false;
             }
             break;
         }
@@ -53,6 +56,7 @@ void authenticate(string name, string pass, Path directory){
         cout << endl << "You are not an existing user !! SignUp first !!";
     }
     file.close();
+    return false;
 }
 
 void writeUser(string name, string pass, Path directory) {
