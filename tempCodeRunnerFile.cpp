@@ -1,1 +1,1 @@
-battingTeamPlayers
+matchDetails.totalTeamPlayers
