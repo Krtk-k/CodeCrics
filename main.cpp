@@ -88,7 +88,7 @@ user_err:
 
         default:
             cout << RED << "Wrong input! Please try again." << RESET << endl;
-            goto user_err;            g++ -IheaderFiles -o main main.cpp
+            goto user_err;
     }
 
     return 0;
