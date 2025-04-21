@@ -62,16 +62,18 @@ int main() {
     // Continuation of the program
     int user_choice;
     string match_name;
-    Viewer vu(username, pwd, false);
 
 user_err:
     cout << endl << BOLD << "1- Write a match" << RESET << endl;
     cout << BOLD << "2- View stats" << RESET << endl;
     cin >> user_choice;
+    Author user1("", "", false); // Declare outside switch
+    Viewer vu("", "", false);   // Declare outside switch
+
     switch (user_choice) {
         case 1:
             if(checkAuthor(username, pwd, mdp)) {
-                Author user1(username, pwd, true);
+                user1 = Author(username, pwd, true);
             }
             else {
                 cout << endl << RED << "Sorry, You dont have rights" << RESET;
@@ -82,6 +84,7 @@ user_err:
             break;
 
         case 2:
+            vu = Viewer(username, pwd, false);
             cout << CYAN << "Match name: " << RESET << endl;
 
             break;
