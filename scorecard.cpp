@@ -1,6 +1,6 @@
 #include <iostream>
-#include "headerFiles/textStyles.h"
-#include "headerFiles/scorecard.h"
+#include "headerFiles/textStyles.hpp"
+#include "headerFiles/scorecard.hpp"
 #include <vector>
 #include <algorithm>
 

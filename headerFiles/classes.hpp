@@ -11,11 +11,11 @@ class User {
     protected:
     string username;
     string password;
-    bool is_author;
+    bool isAuthor;
     int index;
 
     public:
-    User(string username, string pass, bool is_author);
+    User(string &username, string &pass, bool isAuthor);
 
     void change_username(string name);
 
@@ -29,9 +29,8 @@ class Viewer : public User {
     Match *match;
 };
 
-class Authors : public User {
-    private:
-    Match match;
+class Author : public Viewer {
+
 };
 
 class Match{

@@ -2,36 +2,13 @@
 #include <string>
 #include <fstream>
 #include <vector>
-// #include "headerFiles/authenticate.hpp"
+#include "headerFiles/authenticate.hpp"
 #include "headerFiles/classes.hpp"
+#include "headerFiles/scorecard.hpp"
 
 using namespace std;
 
-class Path {
-    private:
-    string mainDirPath;
 
-    public:
-    Path() {
-        mainDirPath = "mainDir/loginInfo";
-    }
-    ofstream signUp() {
-        ofstream signup(mainDirPath + "/userSign.txt", ios::app);
-        // Add a check here to find if the file is created successfully
-        // Use error messages ie: error handling
-        return (signup);
-    }
-    ifstream logIn() {
-        ifstream login(mainDirPath + "/userSign.txt");
-        // Add a check here to find if the file is created successfully
-        // Use error messages ie: error handling
-        return (login);
-    }
-
-
-
-    ~Path() {}
-};
 
 
 Path user_path;
@@ -42,14 +19,14 @@ class User { // This should be an abstract class (no instances)
     protected:
     string username;
     string password;
-    bool is_author;
+    bool isAuthor;
     int index;
 
     public:
-    User(string username, string pass, bool is_author) {
+    User(string username, string pass, bool isAuthor) {
         this->username = username;
         this->password = pass;
-        this->is_author = is_author;
+        this->isAuthor = isAuthor;
         this->index = findPersonIndex(username, pass, user_path);
     }
 
@@ -129,41 +106,50 @@ int findPersonIndex(string username, string password, Path p) {
 class Viewer : public User {
     private:
     Match *match;
-};
-
-class Authors : public User {
-    private:
-    Match match;
-};
-
-class Match{
-    private:
-    string name;
-    ifstream runPtr, batsMen, bowlers;
-    vector<vector<pair<int, int>>> viewVector;
 
     public:
-    Match(string name) {
-        this->name = name;
-        // Three file pointers pointing to all the files of the match
-        runPtr.open("matches/" + name + "runs");
-        batsMen.open("matches/" + name + "batsMen");
-        bowlers.open("matches/" + name + "bowlers");
-    }
-    ifstream* returnRunPtr() {
-        return &runPtr;
-    }
-    ifstream* returnBatsMenPtr() {
-        return &batsMen;
-    }
-    ifstream* returnBowlersPtr() {
-        return &bowlers;
-    }
-
-    void ini_viewVector() {
-        
+    Viewer(string username, string pass, bool isAuthor) : User(username, pass, isAuthor) {
+        this->index = findPersonIndex(username, pass, user_path);
     }
 };
+
+class Author : public Viewer {
+    private:
+
+    public:
+    Author(string username, string pass, bool isAuthor) : Viewer(username, pass, isAuthor) {
+        this->index = findPersonIndex(username, pass, user_path);
+    }
+};
+
+// class Match{
+//     private:
+//     string name;
+//     ifstream runPtr, batsMen, bowlers;
+//     vector<vector<pair<int, int>>> viewVector;
+
+//     public:
+//     Match(string name) {
+//         this->name = name;
+//         // Three file pointers pointing to all the files of the match
+//         runPtr.open("matches/" + name + "runs");
+//         batsMen.open("matches/" + name + "batsMen");
+//         bowlers.open("matches/" + name + "bowlers");
+//     }
+//     ifstream* returnRunPtr() {
+//         return &runPtr;
+//     }
+//     ifstream* returnBatsMenPtr() {
+//         return &batsMen;
+//     }
+//     ifstream* returnBowlersPtr() {
+//         return &bowlers;
+//     }
+
+//     void ini_viewVector() {
+        
+//     }
+// };
 
 
 int main() {

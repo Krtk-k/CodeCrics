@@ -19,6 +19,16 @@ ifstream Path::logIn() {
     return (login);
 }
 
+ofstream Path::author() {
+    ofstream a(mainDirPath + "/authors", ios::app);
+    return (a);
+}
+
+ifstream Path::authorc() {
+    ifstream a(mainDirPath + "/authors");
+    return (a);
+}
+
 // ofstream Path::userUpdate() {
 //     ofstream file(mainDirPath + "/userSign.txt", ios::app);
 //     // Add exception handling
@@ -47,6 +57,7 @@ bool authenticate(string name, string pass, Path directory){
                 return true;
             }else{
                 cout << endl << "Incorrect Password !!";
+                file.close();
                 return false;
             }
             break;
@@ -59,7 +70,7 @@ bool authenticate(string name, string pass, Path directory){
     return false;
 }
 
-void writeUser(string name, string pass, Path directory) {
+bool writeUser(string name, string pass, Path directory) {
     ofstream file_write = directory.signUp();
     ifstream file_read = directory.logIn();
     // Add error handling if required
@@ -72,7 +83,9 @@ void writeUser(string name, string pass, Path directory) {
         if (username == name){
             matchFound = true;
             cout<<endl<<"Username Already Exists !! Try a different one !!"<<endl;
+            return false;
             break;
+            // Add exception handling here
         }
     }
     if(matchFound == false){
@@ -82,6 +95,40 @@ void writeUser(string name, string pass, Path directory) {
     }
     file_write.close();
     file_read.close();
+    return  true;
+}
+
+void writeAuthor(string name, string pass, Path directory) {
+    ofstream file_write = directory.author();
+    file_write.seekp(0, ios::end);
+    file_write << name << '\0' << pass << '\n';
+}
+
+bool checkAuthor(string name, string pass, Path directory) {
+    ifstream file = directory.authorc();
+    string line;
+    bool matchFound = false;
+    while(getline(file,line)){
+        int pos = line.find('\0');
+        string username = line.substr(0,pos);
+        if (username == name){
+            matchFound = true;
+            string password = line.substr(pos+1,line.length());
+            if (password == pass){
+                file.close();
+                return true;
+            }
+            else{
+                file.close();
+                return false;
+            }
+            break;
+        }
+    }
+    if(matchFound == false){
+        file.close();
+        return false;
+    }
 }
 
 string line1 = "\t\tWelcome to CodeCrics", line2 = "\t\t1->Login, 2->Signup";
