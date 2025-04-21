@@ -279,6 +279,7 @@ class BatsmanBowler:public Players{
     int b2Balls;
     int runsScoredOnThisBall;
     int target;
+    vector<string> outBatsmans;
 
     // BOWLER
     string bowler;
@@ -367,26 +368,34 @@ class BatsmanBowler:public Players{
 
         void strikeChange(int runs = 0, string event = ""){
             if (runs%2 == 0 && batsman1==onStrike){
-                // if (event!="Leg Byes"||event!="Byes"||event!="")
-                b1Runs += runs;
-                
+                if (event != "Leg Byes" && event != "Byes" && event != "Wide Ball" && event != "Bowled" && event != "Caught" && event != "LBW" && event != "Stumped" && event != "Hit Wicket" && event != "Retired Hurt" && event != "Retired Out"){
+                    b1Runs += runs;
+                }
+
                 cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : "  <<b1Runs<<" runs in "<<b1Balls<<" balls"<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
                 cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
-                b1Balls++;
+                if (event != "No Ball" && event != "Wide Ball" && event != "Retired Hurt" && event != "Retired Out"){
+                    b1Balls++;
+                }
 
             }else if (runs%2 == 0 && batsman2==onStrike){
-
-                b2Runs += runs;
-
+                if (event != "Leg Byes" && event != "Byes" && event != "Wide Ball" && event != "Bowled" && event != "Caught" && event != "LBW" && event != "Stumped" && event != "Hit Wicket" && event != "Retired Hurt" && event != "Retired Out"){
+                    b2Runs += runs;
+                }
+                
                 cout<<"\t  "<<runningEnd<<" : " <<b1Runs<<" runs in "<<b1Balls<<" balls"<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
                 cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<RESET<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
-                b2Balls++;
-
+                if (event != "No Ball" && event != "Wide Ball" && event != "Retired Hurt" && event != "Retired Out"){
+                    b2Balls++;
+                }
+                
             }else if (runs%2 != 0 && batsman1==onStrike){
 
-                b1Runs += runs;
+                if (event != "Leg Byes" && event != "Byes" && event != "Wide Ball" && event != "Bowled" && event != "Caught" && event != "LBW" && event != "Stumped" && event != "Hit Wicket" && event != "Retired Hurt" && event != "Retired Out"){
+                    b1Runs += runs;
+                }
 
                 string temp = onStrike;
                 onStrike = runningEnd;
@@ -395,11 +404,15 @@ class BatsmanBowler:public Players{
                 cout<<"\t  "<<runningEnd<<" : "<<b1Runs<<" runs in "<<b1Balls<<" balls"<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
                 cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<RESET<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
-                b1Balls++;
+                if (event != "No Ball" && event != "Wide Ball" && event != "Retired Hurt" && event != "Retired Out"){
+                    b1Balls++;
+                }
 
             }else if (runs%2 != 0 && batsman2==onStrike){
 
-                b2Runs += runs;
+                if (event != "Leg Byes" && event != "Byes" && event != "Wide Ball" && event != "Bowled" && event != "Caught" && event != "LBW" && event != "Stumped" && event != "Hit Wicket" && event != "Retired Hurt" && event != "Retired Out"){
+                    b2Runs += runs;
+                }
                 
                 string temp = onStrike;
                 onStrike = runningEnd;
@@ -408,14 +421,16 @@ class BatsmanBowler:public Players{
                 cout<<BOLD<<BRIGHT_GREEN<<"\t* "<<onStrike<< " : " <<b1Runs<<" runs in "<<b1Balls<<" balls"<<RESET<<"\t\t\t\t\t\t"<<GOLD<<bowler<<" : "<<ballsBowled<<"/"<<totalBalls<<RESET<<endl;
                 cout<<"\t  "<<runningEnd<<" : " <<b2Runs<<" runs in "<<b2Balls<<" balls"<<"\t\t\t\t"<<"OVERS : "<<overs<<"\tWICKETS : "<<wickets<<"\tRUNS : "<<runsGiven<<endl;
 
-                b2Balls++;
+                if (event != "No Ball" && event != "Wide Ball" && event != "Retired Hurt" && event != "Retired Out"){
+                    b2Balls++;
+                }
 
             }else{
                 cout<<"ERROR in strikeChange() !!";
             }
         }
 
-        //Function to check whether an over has been ended or not
+        //  Function to check whether an over has been ended or not
         bool overUp(int balls){
             if (balls == 6){
                 return true;
@@ -425,10 +440,69 @@ class BatsmanBowler:public Players{
             }
         }
 
-        void changeBatsman(string Batsman){
+        // Function to change Batsman when Batsman is OUT or HURT
+        void changeBatsman(const string& outBatsman, string type = "OUT"){
+            string newBatsman;
+            if (type == "OUT"){
+                outBatsmans.push_back(outBatsman);
+            }
 
+            cin.ignore();
+            while(1){
+                cout<<"Enter Name of New Batsman : ";
+                getline(cin,newBatsman);
+                if (playerExistsInTeam(newBatsman,battingTeamPlayers)){
+                    if (!playerExistsInTeam(newBatsman,outBatsmans)){
+                        if (outBatsman  == onStrike){
+                            if (outBatsman == batsman1){
+                                batsman1 = newBatsman;
+                            }
+                            else{
+                                batsman2 = newBatsman;
+                            }
+                            onStrike = newBatsman;
+                        }
+                        else{
+                            if (outBatsman == batsman1){
+                                batsman1 = newBatsman;
+                            }
+                            else{
+                                batsman2 = newBatsman;
+                            }
+                            runningEnd = newBatsman;
+                        }
+                        
+                        break;
+                    }
+                    else{
+                        cout<<BRIGHT_RED<<BOLD<<"THIS PLAYER IS ALREADY OUT !!"<<RESET<<endl<<endl;
+                    }
+                }
+                else{
+                    cout<<BRIGHT_RED<<BOLD<<"PLAYER NOT IN TEAM !!"<<RESET<<endl<<endl;
+                }
+            }
         }
-///// Function for changing batsman and bowler separately
+
+        // Function to change Bowler on overUp
+        void changeBowler(){
+            string newBowler;
+            
+            cin.ignore();
+            while(1){
+                cout<<"Enter Name of New Bowler : ";
+                getline(cin,newBowler);
+                if (playerExistsInTeam(newBowler,bowlingTeamPlayers)){
+                    // update current bowler data, take out new bowler data
+                    bowler = newBowler;
+                    // update overs, wickets, runs
+                    break;
+                }
+                else{
+                    cout<<BRIGHT_RED<<BOLD<<"PLAYER NOT IN TEAM !!"<<RESET<<endl<<endl;
+                }
+            }
+        }
         
         // Friend Function
         friend string input(BatsmanBowler&);
@@ -505,34 +579,90 @@ string input(BatsmanBowler& matchDetails){
             }
         }
         else if(event == "5"){
-            cout<<"\nEnter Runs Taken : ";
-            cin>>matchDetails.runsScoredOnThisBall;
-            matchDetails.ballsBowled ++;
-            matchDetails.runsGiven += matchDetails.runsScoredOnThisBall;
-            matchDetails.runsScored += matchDetails.runsScoredOnThisBall;
-            return "Leg Byes";
+            while(1){
+                try{
+                    string temp;
+                    cout<<"\nEnter Runs Taken : ";
+                    cin>>temp;
+                    if (isValidInteger(temp)){
+                        matchDetails.runsScoredOnThisBall = stoi(temp);
+                        matchDetails.ballsBowled ++;
+                        matchDetails.runsGiven += matchDetails.runsScoredOnThisBall;
+                        matchDetails.runsScored += matchDetails.runsScoredOnThisBall;
+                        return "Leg Byes";
+                    }
+                    else{
+                        throw "KINDLY ENTER VALID RUNS !!";
+                    }
+                }
+                catch(const char * str){
+                    cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                }
+            }
         }
         else if(event == "6"){
-            cout<<"\nEnter Runs Taken : ";
-            cin>>matchDetails.runsScoredOnThisBall;
-            matchDetails.ballsBowled ++;
-            matchDetails.runsGiven += matchDetails.runsScoredOnThisBall;
-            matchDetails.runsScored += matchDetails.runsScoredOnThisBall;
-            return "Byes";
+            while(1){
+                try{
+                    string temp;
+                    cout<<"\nEnter Runs Taken : ";
+                    cin>>temp;
+                    if (isValidInteger(temp)){
+                        matchDetails.runsScoredOnThisBall = stoi(temp);
+                        matchDetails.ballsBowled ++;
+                        matchDetails.runsGiven += matchDetails.runsScoredOnThisBall;
+                        matchDetails.runsScored += matchDetails.runsScoredOnThisBall;
+                        return "Byes";
+                    }
+                    else{
+                        throw "KINDLY ENTER VALID RUNS !!";
+                    }
+                }
+                catch(const char * str){
+                    cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                }
+            }
         }
         else if(event == "7"){
-            cout<<"\nEnter Runs Taken : ";
-            cin>>matchDetails.runsScoredOnThisBall;
-            matchDetails.runsGiven += (matchDetails.runsScoredOnThisBall+1);
-            matchDetails.runsScored += (matchDetails.runsScoredOnThisBall+1);
-            return "No Ball";
+            while(1){
+                try{
+                    string temp;
+                    cout<<"\nEnter Runs Taken : ";
+                    cin>>temp;
+                    if (isValidInteger(temp)){
+                        matchDetails.runsScoredOnThisBall = stoi(temp);
+                        matchDetails.runsGiven += (matchDetails.runsScoredOnThisBall+1);
+                        matchDetails.runsScored += (matchDetails.runsScoredOnThisBall+1);
+                        return "No Ball";
+                    }
+                    else{
+                        throw "KINDLY ENTER VALID RUNS !!";
+                    }
+                }
+                catch(const char * str){
+                    cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                }
+            }
         }
         else if(event == "8"){
-            cout<<"\nEnter Runs Taken : ";
-            cin>>matchDetails.runsScoredOnThisBall;
-            matchDetails.runsGiven += (matchDetails.runsScoredOnThisBall+1);
-            matchDetails.runsScored += (matchDetails.runsScoredOnThisBall+1);
-            return "Wide Ball";
+            while(1){
+                try{
+                    string temp;
+                    cout<<"\nEnter Runs Taken : ";
+                    cin>>temp;
+                    if (isValidInteger(temp)){
+                        matchDetails.runsScoredOnThisBall = stoi(temp);
+                        matchDetails.runsGiven += (matchDetails.runsScoredOnThisBall+1);
+                        matchDetails.runsScored += (matchDetails.runsScoredOnThisBall+1);
+                        return "Wide Ball";
+                    }
+                    else{
+                        throw "KINDLY ENTER VALID RUNS !!";
+                    }
+                }
+                catch(const char * str){
+                    cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                }
+            }
         }
         else if(event == "9"){
             string n;
@@ -543,112 +673,152 @@ string input(BatsmanBowler& matchDetails){
             cout<<"PRESS 4 : Run Out"<<endl;
             cout<<"PRESS 5 : Stumped"<<endl;
             cout<<"PRESS 6 : Hit Wicket"<<endl<<endl;
-            cout<<"Enter Number : ";
-            cin>>n;
-    
-            if(n == "1"){
-                matchDetails.ballsBowled++;
-                matchDetails.wickets++;
-                matchDetails.wicketsDown++;
+
+            while(1){
+                cout<<"Enter Number : ";
+                cin>>n;
+                if(n == "1"){
+                    matchDetails.ballsBowled++;
+                    matchDetails.wickets++;
+                    matchDetails.wicketsDown++;
+
+                    matchDetails.changeBatsman(matchDetails.onStrike);
+
+                    return "Bowled";
+                }
+                else if(n == "2"){
+                    matchDetails.ballsBowled++;
+                    matchDetails.wickets++;
+                    matchDetails.wicketsDown++;
+
+                    matchDetails.changeBatsman(matchDetails.onStrike);
+
+                    return "Caught";
+                }
+                else if(n == "3"){
+                    matchDetails.ballsBowled++;
+                    matchDetails.wickets++;
+                    matchDetails.wicketsDown++;
+
+                    matchDetails.changeBatsman(matchDetails.onStrike);
+
+                    return "LBW";
+                }
+                else if(n == "4"){
+                    while(1){
+                        try{
+                            string temp;
+                            cout<<"\nEnter Runs Taken : ";
+                            cin>>temp;
+                            if (isValidInteger(temp)){
+                                matchDetails.runsScoredOnThisBall = stoi(temp);
+                                matchDetails.runsGiven += matchDetails.runsScoredOnThisBall;
+                                matchDetails.runsScored += matchDetails.runsScoredOnThisBall;
+                            }
+                            else{
+                                throw "KINDLY ENTER VALID RUNS !!";
+                            }
+                        }
+                        catch(const char * str){
+                            cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                        }
+                    }
+
+                    cin.ignore();
+                    while (1){
+                        try{
+                            string name;
+                            cout<<"\nEnter Name of Batsman who got RUN OUT : ";
+                            getline(cin,name);
+                            if (name == onStrike || name == runningEnd){
+                                matchDetails.changeBatsman(name);
+                                break;
+                            }
+                            else{
+                                throw "PLAYER NOT ON CREASE !!";
+                            }
+                        }
+                        catch (const char * str){
+                            cout<<BRIGHT_RED<<BOLD<<str<<RESET<<endl<<endl;
+                        }
+                    }
+                    return "Run Out";        
+                }
+                else if(n == "5"){
+                    matchDetails.ballsBowled++;
+                    matchDetails.wickets++;
+                    matchDetails.wicketsDown++;
+
+                    matchDetails.changeBatsman(matchDetails.onStrike);
+
+                    return "Stumped";
+                }
+                else if(n == "6"){
+                    matchDetails.ballsBowled++;
+                    matchDetails.wickets++;
+                    matchDetails.wicketsDown++;
+
+                    matchDetails.changeBatsman(matchDetails.onStrike);
+
+                    return "Hit Wicket";
+                }
+                else{
+                    cout<<BOLD<<BRIGHT_RED<<"\nINVALID INPUT !!\n\n"<<RESET;
+                }
             }
-            else if(n == "2"){
-                matchDetails.ballsBowled++;
-                matchDetails.wickets++;
-                matchDetails.wicketsDown++;
-            }
-            else if(n == "3"){
-                matchDetails.ballsBowled++;
-                matchDetails.wickets++;
-                matchDetails.wicketsDown++;
-            }
-            else if(n == "4"){
-    
-            }
-    
-            // name of new batsman
-            return "Out";
         }
         else if(event == "10"){
             string retiredHurt;
             string newBatsman;
-    
-            cout<<"\nWho is Retired Hurt ?\n\nPRESS 1 for Batsman at Striking End\nPRESS 2 for Batsman at Running End\n\n";
-            cout<<"Enter Number : ";
-            cin>>retiredHurt;
-            cout<<"Enter Name of New Batsman : ";
-            cin>>newBatsman;
-            //include check whether new batsman is in team or not
-    
+            while(1){
+                cout<<"\nWho is Retired Hurt ?\n\nPRESS 1 for Batsman at Striking End\nPRESS 2 for Batsman at Running End\n\n";
+                cout<<"Enter Number : ";
+                cin>>retiredHurt;
+                if (isValidInteger(retiredHurt)){
+                    if (retiredHurt == "1" || retiredHurt == "2"){
+                        break;
+                    }
+                }
+                cout<<BOLD<<BRIGHT_RED<<"\nINVALID INPUT !!\n\n"<<RESET;
+            }
+
             if (retiredHurt == "1"){
-                if (matchDetails.batsman1 == matchDetails.onStrike){
-                    matchDetails.batsman1 = newBatsman;
-                    matchDetails.onStrike = newBatsman;
-                }
-                else{
-                    matchDetails.batsman2 = newBatsman;
-                    matchDetails.onStrike = newBatsman;
-                }
+                matchDetails.changeBatsman(matchDetails.onStrike,"HURT");
             }
             else if(retiredHurt == "2"){
-                if (matchDetails.batsman1 == matchDetails.runningEnd){
-                    matchDetails.batsman1 = newBatsman;
-                    matchDetails.runningEnd = newBatsman;
-                }
-                else{
-                    matchDetails.batsman2 = newBatsman;
-                    matchDetails.runningEnd = newBatsman;
-                }
+                matchDetails.changeBatsman(matchDetails.runningEnd,"HURT");
             }
-            else{
-                cout<<"\nINVALID INPUT !!\n\n";
-            }
-    
             return "Retired Hurt";
         }
         else if(event == "11"){
             string retiredOut;
             string newBatsman;
-            
-            cout<<"\nWho is Retired Out ?\n\nPRESS 1 for Batsman at Striking End\nPRESS 2 for Batsman at Running End\n\n";
-            cout<<"Enter Number : ";
-            cin>>retiredOut;
-            cout<<"Enter Name of New Batsman : ";
-            cin>>newBatsman;
-            //include check whether new batsman is in team or not
+            while(1){
+                cout<<"\nWho is Retired Out ?\n\nPRESS 1 for Batsman at Striking End\nPRESS 2 for Batsman at Running End\n\n";
+                cout<<"Enter Number : ";
+                cin>>retiredOut;
+                if (isValidInteger(retiredOut)){
+                    if (retiredOut == "1" || retiredOut == "2"){
+                        break;
+                    }
+                }
+                cout<<BOLD<<BRIGHT_RED<<"\nINVALID INPUT !!\n\n"<<RESET;
+            }
     
             if (retiredOut == "1"){
-                if (matchDetails.batsman1 == matchDetails.onStrike){
-                    matchDetails.batsman1 = newBatsman;
-                    matchDetails.onStrike = newBatsman;
-                }
-                else{
-                    matchDetails.batsman2 = newBatsman;
-                    matchDetails.onStrike = newBatsman;
-                }
-                matchDetails.wicketsDown++;
+                matchDetails.changeBatsman(matchDetails.onStrike);
             }
             else if(retiredOut == "2"){
-                if (matchDetails.batsman1 == matchDetails.runningEnd){
-                    matchDetails.batsman1 = newBatsman;
-                    matchDetails.runningEnd = newBatsman;
-                }
-                else{
-                    matchDetails.batsman2 = newBatsman;
-                    matchDetails.runningEnd = newBatsman;
-                }
-                matchDetails.wicketsDown++;
+                matchDetails.changeBatsman(matchDetails.runningEnd);
             }
-            else{
-                cout<<"\nINVALID INPUT !!\n\n";
-            }
-    
+
+            matchDetails.wicketsDown++;
             return "Retired Out";
         }
         else{
-            cout<<BOLD<<BRIGHT_RED"\nINVALID INPUT !!\n\n"<<RESET;
+            cout<<BOLD<<BRIGHT_RED<<"\nINVALID INPUT !!\n\n"<<RESET;
         }
     }
-
 }
 
 void scoreboard(string inning, BatsmanBowler& matchDetails){
@@ -719,12 +889,17 @@ void scoreboard(string inning, BatsmanBowler& matchDetails){
         // Taking User Input for Scoring
         event = input(matchDetails);
 
+        if (matchDetails.overUp(matchDetails.ballsBowled)){
+            cout<<endl<<BOLD<<BG_GREEN<<"OVER UP !!"<<RESET<<endl<<endl;
+            matchDetails.changeBowler();
+            cout<<endl<<BOLD<<BG_GREEN<<"BOWLER CHANGED !!"<<RESET<<endl<<endl;
+        }
 // break is Just for trial
 break;
     }
 
     if (inning == "(INNING : 1)"){
-        matchDetails.target = matchDetails.runsScored;
+        matchDetails.target = matchDetails.runsScored + 1;
     }
 
 }
@@ -740,14 +915,13 @@ void enteringScoringArea(){
 
 }
 
+// ye main fn hatadena
 int main() {
     enteringScoringArea();
 }
 
-// loops pending - on aage ka kaam
+
 // second innings me bhi striking end and batting end wala maangna hai
 // use getline wherever needed
-// make sure that the batsman entered by the user is not already out.
-// uske baad scoring kaise karni hai wo dekhna
-// jo number choice ke liye input le rahe ho use integer ki jagah char ya string kar sakte hai
+// jo number choice ke liye input le rahe ho use integer ki jagah string kar sakte hai - this file is done
 // agar is file ko aur header files me separate kar sakte hi to kardena, like some general functions like toLowercase and toUpperCase
