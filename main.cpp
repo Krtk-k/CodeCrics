@@ -30,9 +30,7 @@ int main() {
                 if (checkAuthor(username, pwd, mdp)) {
                     is_author = 1;
                 }
-                cout << GREEN << "Login successful! Welcome, " << username << "." << RESET << endl;
             } else {
-                cout << RED << "Authentication failed! Please try again." << RESET << endl;
                 throw 'a';
             }
             break;
@@ -48,9 +46,7 @@ int main() {
                 if (is_author) {
                     writeAuthor(username, pwd, mdp);
                 }
-                cout << GREEN << "Signup successful! Welcome, " << username << "." << RESET << endl;
             } else {
-                cout << RED << "Error during signup. Please try again." << RESET << endl;
                 throw 'w';
             }
             break;
@@ -62,13 +58,13 @@ int main() {
     // Continuation of the program
     int user_choice;
     string match_name;
+    Author user1("", "", false);
+    Viewer vu("", "", false);
 
 user_err:
-    cout << endl << BOLD << "1- Write a match" << RESET << endl;
-    cout << BOLD << "2- View stats" << RESET << endl;
+    cout << endl << BOLD << "1- Write a match: " << RESET << endl;
+    cout << BOLD << "2- View stats: " << RESET << endl;
     cin >> user_choice;
-    Author user1("", "", false); // Declare outside switch
-    Viewer vu("", "", false);   // Declare outside switch
 
     switch (user_choice) {
         case 1:
@@ -79,13 +75,54 @@ user_err:
                 cout << endl << RED << "Sorry, You dont have rights" << RESET;
                 goto user_err;
             }
+            bool user_change = false;
+            cout << endl << RED << "If change passwrord or username enter 1, (else enter 0): " << RESET;
+            cin >> user_change;
+            if(user_change == true) {
+                string new_pass, new_name;
+                cout << endl << "Enter new username: ";
+                cin >> new_name;
+                user1.change_username(new_name);
+                cout << endl << "Enter new password: ";
+                cin >> new_pass;
+                user1.change_password(new_pass);
+            }
+            
             cout << CYAN << "Match name: " << RESET << endl;
 
             break;
 
         case 2:
             vu = Viewer(username, pwd, false);
-            cout << CYAN << "Match name: " << RESET << endl;
+            bool user_change = false;
+            cout << endl << RED << "If change passwrord or username enter 1, (else enter 0): " << RESET;
+            cin >> user_change;
+            if(user_change == true) {
+                string new_pass, new_name;
+                cout << endl << "Enter new username: ";
+                cin >> new_name;
+                vu.change_username(new_name);
+                cout << endl << "Enter new password: ";
+                cin >> new_pass;
+                vu.change_password(new_pass);
+            }
+            cout << endl << CYAN << "Match name: " << RESET << endl;
+            string team_name;
+            cout << endl << "Enter team name: ";
+            cin >> team_name;
+            cout << endl << BRIGHT_YELLOW << "Team 1: " << RESET << WHITE << team_name << RESET << endl
+            << GREEN << "Batting.." << RESET;
+            vu.show_batting();
+            cout << endl << GREEN << "Bowling.." << RESET;
+            vu.show_bowling();
+
+            cout << endl << "Enter team name: ";
+            cin >> team_name;
+            cout << endl << BRIGHT_YELLOW << "Team 2: " << RESET << WHITE << team_name << RESET << endl << RESET
+            << GREEN << "Batting.." << RESET;
+            vu.show_batting();
+            cout << endl << GREEN << "Bowling.." << RESET;
+            vu.show_bowling();
 
             break;
 

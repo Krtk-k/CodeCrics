@@ -11,7 +11,6 @@ using namespace std;
 
 
 
-Path user_path;
 
 int findPersonIndex(string username, string pass, Path p);
 
@@ -110,6 +109,14 @@ class Viewer : public User {
     public:
     Viewer(string username, string pass, bool isAuthor) : User(username, pass, isAuthor) {
         this->index = findPersonIndex(username, pass, user_path);
+    }
+
+    void show_batting() {
+
+    }
+    
+    void show_bowling() {
+        
     }
 };
 

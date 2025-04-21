@@ -1,5 +1,6 @@
 #include "headerFiles/authenticate.hpp"
 #include <iostream>
+#include "headerFiles/textStyles.hpp"
 
 using namespace std;
 
@@ -52,11 +53,11 @@ bool authenticate(string name, string pass, Path directory){
             matchFound = true;
             string password = line.substr(pos+1,line.length());
             if (password == pass){
-                cout << endl << "LOGIN SUCCESSFUL !! Welcome";
+                cout << endl << GREEN << "LOGIN SUCCESSFUL !! Welcome" << RESET;
                 file.close();
                 return true;
             }else{
-                cout << endl << "Incorrect Password !!";
+                cout << endl << RED << "Incorrect Password !!" << RESET;
                 file.close();
                 return false;
             }
@@ -64,7 +65,7 @@ bool authenticate(string name, string pass, Path directory){
         }
     }
     if(matchFound == false){
-        cout << endl << "You are not an existing user !! SignUp first !!";
+        cout << endl << RED << "You are not an existing user !! SignUp first !!" << RESET;
     }
     file.close();
     return false;
@@ -82,7 +83,7 @@ bool writeUser(string name, string pass, Path directory) {
         string username = line.substr(0,pos);
         if (username == name){
             matchFound = true;
-            cout<<endl<<"Username Already Exists !! Try a different one !!"<<endl;
+            cout<<endl<< RED << "Username Already Exists !! Try a different one !!"<<endl << RESET;
             return false;
             break;
             // Add exception handling here
@@ -91,7 +92,7 @@ bool writeUser(string name, string pass, Path directory) {
     if(matchFound == false){
         file_write.seekp(0, ios::end);
         file_write << name << '\0' << pass << '\n';
-        cout << endl << "ACCOUNT CREATED SUCCESSFULLY !!";
+        cout << GREEN << endl << "ACCOUNT CREATED SUCCESSFULLY !!" << RESET;
     }
     file_write.close();
     file_read.close();

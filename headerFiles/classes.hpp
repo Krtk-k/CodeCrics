@@ -5,6 +5,8 @@
 
 using namespace std;
 
+Path user_path;
+
 int findPersonIndex(string username, string pass, Path p);
 
 class User {
@@ -27,10 +29,17 @@ class User {
 class Viewer : public User {
     private:
     Match *match;
+
+    public:
+    Viewer(string username, string pass, bool isAuthor);
+
+    void show_batting();
+    void show_bowling();
 };
 
 class Author : public Viewer {
-
+    public:
+    Author(string username, string pass, bool isAuthor);
 };
 
 class Match{
