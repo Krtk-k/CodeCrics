@@ -824,6 +824,13 @@ string input(BatsmanBowler& matchDetails){
                     matchDetails.wickets++;
                     matchDetails.wicketsDown++;
 
+                    if (matchDetails.onStrike == matchDetails.batsman1){
+                        matchDetails.b1Balls++;
+                    }
+                    else{
+                        matchDetails.b2Balls++;
+                    }
+
                     if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                         matchDetails.changeBatsman(matchDetails.onStrike);
                     }
@@ -836,6 +843,13 @@ string input(BatsmanBowler& matchDetails){
                     matchDetails.wickets++;
                     matchDetails.wicketsDown++;
 
+                    if (matchDetails.onStrike == matchDetails.batsman1){
+                        matchDetails.b1Balls++;
+                    }
+                    else{
+                        matchDetails.b2Balls++;
+                    }
+
                     if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                         matchDetails.changeBatsman(matchDetails.onStrike);
                     }
@@ -847,6 +861,14 @@ string input(BatsmanBowler& matchDetails){
                     matchDetails.ballsBowled++;
                     matchDetails.wickets++;
                     matchDetails.wicketsDown++;
+
+                    if (matchDetails.onStrike == matchDetails.batsman1){
+                        matchDetails.b1Balls++;
+                    }
+                    else{
+                        matchDetails.b2Balls++;
+                    }
+
 
                     if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                         matchDetails.changeBatsman(matchDetails.onStrike);
@@ -883,7 +905,7 @@ string input(BatsmanBowler& matchDetails){
                             cout<<"\nEnter Name of Batsman who got RUN OUT : ";
                             getline(cin,name);
                             if (name == matchDetails.onStrike || name == matchDetails.runningEnd){
-                                if (name == matchDetails.batsman1){
+                                if (matchDetails.onStrike == matchDetails.batsman1){
                                     matchDetails.b1Runs += matchDetails.runsScoredOnThisBall;
                                     matchDetails.b1Balls++;
                                 }
@@ -895,6 +917,8 @@ string input(BatsmanBowler& matchDetails){
                                 if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                                     matchDetails.changeBatsman(name);
                                 }
+                                
+                                matchDetails.ballsBowled++;
                                 break;
                             }
                             else{
@@ -913,6 +937,13 @@ string input(BatsmanBowler& matchDetails){
                     matchDetails.wickets++;
                     matchDetails.wicketsDown++;
 
+                    if (matchDetails.onStrike == matchDetails.batsman1){
+                        matchDetails.b1Balls++;
+                    }
+                    else{
+                        matchDetails.b2Balls++;
+                    }
+
                     if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                         matchDetails.changeBatsman(matchDetails.onStrike);
                     }
@@ -924,6 +955,13 @@ string input(BatsmanBowler& matchDetails){
                     matchDetails.ballsBowled++;
                     matchDetails.wickets++;
                     matchDetails.wicketsDown++;
+
+                    if (matchDetails.onStrike == matchDetails.batsman1){
+                        matchDetails.b1Balls++;
+                    }
+                    else{
+                        matchDetails.b2Balls++;
+                    }
 
                     if (matchDetails.wicketsDown < (matchDetails.totalTeamPlayers-1)){
                         matchDetails.changeBatsman(matchDetails.onStrike);
