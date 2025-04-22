@@ -162,7 +162,55 @@ vector<int> matchInfo::getBowler(string name,string teamName){
 
 void matchInfo::totalMatchesOnPlatformDetails(vector<string> teams, string matchWinner){
     ofstream file("mainDir/totalMatchesOnPlatformDetails.txt", ios::app);
-    string line = "match" + to_string(matchNumber) + ":" + teams[0] + "&" + teams[1] + "_" + matchWinner;
+    string line = "match" + to_string(matchNumber) + ":" + teams[0] + "&" + teams[1] + "/" + matchWinner;
     file << line << "\n";
     file.close();
+}
+
+vector<int> matchInfo::getBatsmanForView(string name, string team, string matchNum) {
+    ifstream readTeamFile("mainDir/matchInfo/"+(matchNum)+"."+team+".batting.txt");
+    vector<int> batsmanDetails;
+    string line;
+
+    while (getline(readTeamFile, line)) {
+        int underscorePosition = line.find('_');
+        string batsman = line.substr(0,underscorePosition);
+        if (batsman == name){
+            int dotPosition = line.find('.');
+            int runs = stoi(line.substr(underscorePosition+1,dotPosition));
+            batsmanDetails.push_back(runs);
+
+            int balls = stoi(line.substr(dotPosition+1,line.length()));
+            batsmanDetails.push_back(balls);
+            
+            readTeamFile.close();
+            return batsmanDetails;
+        }
+    }
+}
+
+vector<int> matchInfo::getBowlerForView(string name, string team, string matchNum) {
+    ifstream readTeamFile("mainDir/matchInfo/"+(matchNum)+"."+team+".bowling.txt");
+    vector<int> bowlerDetails;
+    string line;
+
+    while (getline(readTeamFile, line)) {
+        int underscorePosition = line.find('_');
+        string bowler = line.substr(0,underscorePosition);
+        if (bowler == name){
+            int dotPosition = line.find('.');
+            int overs = stoi(line.substr(underscorePosition+1,dotPosition));
+            bowlerDetails.push_back(overs);
+
+            int slashPosition = line.find('/');
+            int wickets = stoi(line.substr(dotPosition+1,slashPosition));
+            bowlerDetails.push_back(wickets);
+
+            int runs = stoi(line.substr(slashPosition+1,line.length()));
+            bowlerDetails.push_back(runs);
+            
+            readTeamFile.close();
+            return bowlerDetails;
+        }
+    }
 }

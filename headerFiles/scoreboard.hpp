@@ -1,5 +1,7 @@
 #pragma once
 
+#include "matchInfo.hpp"
+
 using namespace std;
 
 void toLowerCase(string& name);

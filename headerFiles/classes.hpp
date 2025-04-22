@@ -1,11 +1,14 @@
 #pragma once
 
+#include "authenticate.hpp"
+
 using namespace std;
 
 int findPersonIndex(string username, string pass, Path p);
 
 class User { // This should be an abstract class (no instances)
     protected:
+    Path user_path;
     string username;
     string password;
     bool isAuthor;

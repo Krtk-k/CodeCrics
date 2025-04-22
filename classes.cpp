@@ -40,8 +40,8 @@ void User::change_username(string name) {
 
         r_file.close();
         file.close();
-        remove("mainDir/loginInfo/userSign.txt");
-        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
+        remove("mainDir/loginInfo/userLogin.txt");
+        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userLogin.txt");
     }
 
 void User::change_password(string pass) {
@@ -65,8 +65,8 @@ void User::change_password(string pass) {
 
         r_file.close();
         file.close();
-        remove("mainDir/loginInfo/userSign.txt");
-        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userSign.txt");
+        remove("mainDir/loginInfo/userLogin.txt");
+        rename("mainDir/loginInfo/temp.txt", "mainDir/loginInfo/userLogin.txt");
     }
 
 int findPersonIndex(string username, string password, Path p) {
@@ -96,16 +96,16 @@ void Viewer::show_batting(const vector<string>& batsmen, const string& teamName,
         matchInfo matchInfo1; // Create an instance of Matchinfo
         cout << "Batsman Name\tTotal Runs Scored\tNumber of Balls Played" << endl;
     
-        for (const string& batsman : batsmen) {
+        for (int i = 0 ; i<batsmen.size() ; i++) {
             // Fetch stats for each batsman using getBatsman()
-            vector<int> stats = matchInfo1.getBatsmanForView(batsman, teamName, matchNum);
+            vector<int> stats = matchInfo1.getBatsmanForView(batsmen[i], teamName, matchNum);
     
             if (!stats.empty()) {
                 // Print batsman name, total runs, and balls played
-                cout << batsman << "\t\t" << stats[0] << "\t\t\t" << stats[1] << endl;
+                cout << batsmen[i] << "\t\t" << stats[0] << "\t\t\t" << stats[1] << endl;
             } else {
                 // Handle case where no stats are found
-                cout << batsman << "\t\tNo stats available\t\tNo stats available" << endl;
+                cout << batsmen[i] << "\t\tNo stats available\t\tNo stats available" << endl;
             }
         }
     }
@@ -114,18 +114,18 @@ void Viewer::show_bowling(const vector<string>& bowlers, const string& teamName,
         matchInfo matchInfo; // Create an instance of Matchinfo
         cout << "Bowler Name\tBalls Delivered\tWickets Taken\tTotal Runs Scored on Balls" << endl;
     
-        for (const string& bowler : bowlers) {
+        for (int i = 0 ; i<bowlers.size() ; i++) {
             // Fetch stats for each bowler using getBowler()
-            vector<int> stats = matchInfo.getBowlerForView(bowler, teamName, matchNum);
+            vector<int> stats = matchInfo.getBowlerForView(bowlers[i], teamName, matchNum);
     
             if (!stats.empty()) {
                 // Calculate total balls delivered from overs
                 int ballsDelivered = stats[0] * 6;
                 // Print bowler name, balls delivered, wickets taken, and runs given
-                cout << bowler << "\t\t" << ballsDelivered << "\t\t" << stats[2] << "\t\t" << stats[1] << endl;
+                cout << bowlers[i] << "\t\t" << ballsDelivered << "\t\t" << stats[2] << "\t\t" << stats[1] << endl;
             } else {
                 // Handle case where no stats are found
-                cout << bowler << "\t\tNo stats available\t\tNo stats available\t\tNo stats available" << endl;
+                cout << bowlers[i] << "\t\tNo stats available\t\tNo stats available\t\tNo stats available" << endl;
             }
         }
     }
@@ -138,11 +138,3 @@ Author::Author(string username, string pass, bool isAuthor) : Viewer(username, p
 void Author::callScoreBoard() {
         enteringScoringArea();
     }
-
-// int main() {
-//     User obj("kartik", "hello", true);
-
-//     obj.change_username("kavi");
-//     Viewer v1("kartik", "haha", false);
-//     return 0;
-// }

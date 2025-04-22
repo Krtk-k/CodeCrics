@@ -1,2 +1,2 @@
-match1:ABC&c_ABC
-match2:IND&ENG_IND
+match1:IND&ENG/IND
+match2:AUS&PAK/AUS
