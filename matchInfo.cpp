@@ -2,11 +2,11 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include <headerFiles/matchInfo.hpp>
+#include "headerFiles/matchInfo.hpp"
 
 using namespace std;
 
-void matchInfo::createMatchFiles(vector<string> teams, vector<string> t1players, vector<string> t2players, string tossWinner = "", string choice = ""){
+void matchInfo::createMatchFiles(vector<string> teams, vector<string> t1players, vector<string> t2players, string tossWinner, string choice){
            
     ifstream getTotalMatchesPlayedOnOurPlatform("mainDir/totalMatchesPlayedOnOurPlatform");
     getline(getTotalMatchesPlayedOnOurPlatform, temp);
@@ -53,12 +53,12 @@ void matchInfo::setBatsman(string name, int runs, int balls, string teamName){
         int underscorePosition = lines[i].find('_');
         string batsman = lines[i].substr(0,underscorePosition);
         if (batsman == name){
-            int dotPosition = lines[i].find('.');
-            int oldRuns = stoi(lines[i].substr(underscorePosition+1,dotPosition));
-            int updatedRuns = oldRuns + runs;
+            // int dotPosition = lines[i].find('.');
+            // int oldRuns = stoi(lines[i].substr(underscorePosition+1,dotPosition));
+            int updatedRuns = runs;
 
-            int oldBalls = stoi(lines[i].substr(dotPosition+1,lines[i].length()));
-            int updatedBalls = oldBalls + balls;
+            // int oldBalls = stoi(lines[i].substr(dotPosition+1,lines[i].length()));
+            int updatedBalls = balls;
 
             string updatedLine = batsman + "_" + to_string(updatedRuns) + "." + to_string(updatedBalls);
             lines[i] = updatedLine;
@@ -88,16 +88,16 @@ void matchInfo::setBowler(string name,int overs,int wickets,int runs,string team
         int underscorePosition = lines[i].find('_');
         string bowler = lines[i].substr(0,underscorePosition);
         if (bowler == name){
-            int dotPosition = lines[i].find('.');
-            int oldOvers = stoi(lines[i].substr(underscorePosition+1,dotPosition));
-            int updatedOvers = oldOvers + overs;
+            // int dotPosition = lines[i].find('.');
+            // int oldOvers = stoi(lines[i].substr(underscorePosition+1,dotPosition));
+            int updatedOvers = overs;
 
-            int slashPosition = lines[i].find('/');
-            int oldWickets = stoi(lines[i].substr(dotPosition+1,slashPosition));
-            int updatedWickets = oldWickets + wickets;
+            // int slashPosition = lines[i].find('/');
+            // int oldWickets = stoi(lines[i].substr(dotPosition+1,slashPosition));
+            int updatedWickets = wickets;
 
-            int oldRuns = stoi(lines[i].substr(slashPosition+1,lines[i].length()));
-            int updatedRuns = oldRuns + runs;
+            // int oldRuns = stoi(lines[i].substr(slashPosition+1,lines[i].length()));
+            int updatedRuns = runs;
 
             string updatedLine = bowler + "_" + to_string(updatedOvers) + "." + to_string(updatedWickets) + "/" + to_string(updatedRuns);
             lines[i] = updatedLine;

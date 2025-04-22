@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace std;
+
 class matchInfo{
     int matchNumber;
     string temp;
