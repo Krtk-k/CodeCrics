@@ -128,6 +128,7 @@ vector<int> matchInfo::getBatsman(string name,string teamName){
             int balls = stoi(line.substr(dotPosition+1,line.length()));
             batsmanDetails.push_back(balls);
             
+            readTeamFile.close();
             return batsmanDetails;
         }
     }
@@ -153,7 +154,15 @@ vector<int> matchInfo::getBowler(string name,string teamName){
             int runs = stoi(line.substr(slashPosition+1,line.length()));
             bowlerDetails.push_back(runs);
             
+            readTeamFile.close();
             return bowlerDetails;
         }
     }
+}
+
+void matchInfo::totalMatchesOnPlatformDetails(vector<string> teams, string matchWinner){
+    ofstream file("mainDir/totalMatchesOnPlatformDetails.txt", ios::app);
+    string line = "match" + to_string(matchNumber) + ":" + teams[0] + "&" + teams[1] + "_" + matchWinner;
+    file << line << "\n";
+    file.close();
 }

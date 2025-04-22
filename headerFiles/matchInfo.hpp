@@ -12,4 +12,6 @@ class matchInfo{
         void setBowler(string name,int overs,int wickets,int runs,string teamName);
         vector<int> getBatsman(string name,string teamName);
         vector<int> getBowler(string name,string teamName);
+        
+        void totalMatchesOnPlatformDetails(vector<string> teams, string matchWinner);
 };

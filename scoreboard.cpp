@@ -1070,9 +1070,11 @@ void scoreboard(string inning, BatsmanBowler& matchDetails){
             if (matchDetails.runsScored >= matchDetails.target){
                 if(matchDetails.battingTeamPlayers == matchDetails.t1players){
                     cout<<endl<<BOLD<<BG_GREEN<<matchDetails.team1<<" won by "<< ((matchDetails.totalTeamPlayers-1) - matchDetails.wicketsDown) << " wickets !!"<<RESET<<endl;
+                    matchDetails.match.totalMatchesOnPlatformDetails(matchDetails.teams, matchDetails.team1);
                 }
                 else{
                     cout<<endl<<BOLD<<BG_GREEN<<matchDetails.team2<<" won by "<< ((matchDetails.totalTeamPlayers-1) - matchDetails.wicketsDown) << " wickets !!"<<RESET<<endl;
+                    matchDetails.match.totalMatchesOnPlatformDetails(matchDetails.teams, matchDetails.team2);
                 }
                 battingTeamWon = true;
 
@@ -1150,9 +1152,11 @@ void scoreboard(string inning, BatsmanBowler& matchDetails){
     if (inning == "(INNING : 2)" && battingTeamWon == false){
         if(matchDetails.bowlingTeamPlayers == matchDetails.t1players){
             cout<<endl<<BOLD<<BG_GREEN<<matchDetails.team1<<" won by "<< ((matchDetails.target - 1) -  matchDetails.runsScored) << " runs !!"<<RESET<<endl;
+            matchDetails.match.totalMatchesOnPlatformDetails(matchDetails.teams, matchDetails.team1);
         }
         else{
             cout<<endl<<BOLD<<BG_GREEN<<matchDetails.team2<<" won by "<< ((matchDetails.target - 1) -  matchDetails.runsScored) << " runs !!"<<RESET<<endl;
+            matchDetails.match.totalMatchesOnPlatformDetails(matchDetails.teams, matchDetails.team2);
         }
     }
 }
