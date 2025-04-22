@@ -1,6 +1,6 @@
 #include <iostream>
-#include "headerFiles/textStyles.hpp"
 #include "headerFiles/scoreboard.hpp"
+#include "headerFiles/textStyles.hpp"
 #include "headerFiles/matchInfo.hpp"
 #include <vector>
 #include <algorithm>
@@ -47,29 +47,7 @@ bool isValidInteger(string& n){
     return true;
 }
 
-class Players{
-    protected:
-
-        int n;
-        string team1;
-        string team2;
-        vector<string> t1players;
-        vector<string> t2players;
-        vector<string> teams;
-        string name;
-        int totalOversToBePlayed;
-        string choice;
-        string tossWinner;
-        string tossLoser;
-        matchInfo match;
-
-        // TEAMS
-        vector<string> battingTeamPlayers;
-        vector<string> bowlingTeamPlayers;
-
-    public:
-
-        Players(){
+Players::Players(){
             cout<<endl<<"\t\t\t🎾🏏⚾️"<<UNDERLINE<<BOLD<<BRIGHT_WHITE<<" WELCOME TO THE SCORING AREA "<<RESET<<"⚾️🏏🎾"<<endl;
 
             while (1) {
@@ -246,8 +224,8 @@ class Players{
             cin.ignore();
         }
 
-        // Checks whether the player entered by the user exists in our database or not
-        bool playerExistsInDatabase(const string& player){
+// Checks whether the player entered by the user exists in our database or not
+bool Players::playerExistsInDatabase(const string& player){
             ifstream file("mainDir/loginInfo/userLogin.txt");
             string line;
             while(getline(file,line)){
@@ -262,49 +240,14 @@ class Players{
             return false;
         }
 
-        // Checks whether the player entered by the user is in team or not
-        bool playerExistsInTeam(const string& player, const vector<string>& teamPlayers){
+// Checks whether the player entered by the user is in team or not
+bool Players::playerExistsInTeam(const string& player, const vector<string>& teamPlayers){
             return find(teamPlayers.begin(), teamPlayers.end(), player) != teamPlayers.end();
         }
 
-        ~Players(){}
-        
-};
+Players::~Players(){}
 
-class BatsmanBowler:public Players{
-
-    // BATSMAN
-    string onStrike;
-    string runningEnd;
-    string batsman1;
-    string batsman2;
-    int b1Runs;
-    int b2Runs;
-    int b1Balls;
-    int b2Balls;
-    int runsScoredOnThisBall;
-    int target;
-    vector<string> outBatsmans;
-
-    // BOWLER
-    string bowler;
-    int totalBalls;
-    int ballsBowled;
-    int overs;
-    int wickets;
-    int runsGiven;
-
-    // STATIC VARIABLES
-    static int oversThrown;
-    static int runsScored;
-    static int wicketsDown;
-    static bool displayingRawScoreboard;
-
-    int totalTeamPlayers;
-
-    public:
-
-        BatsmanBowler(){
+BatsmanBowler::BatsmanBowler(){
 
             while(1){
                 try{
@@ -374,7 +317,7 @@ class BatsmanBowler:public Players{
 
         }
 
-        void initializingSecondInnings(){
+void BatsmanBowler::initializingSecondInnings(){
 
             // Swapping BattingTeamPlayers and BowlingTeamPlayers Vectors
             swap(battingTeamPlayers,bowlingTeamPlayers);
@@ -452,7 +395,7 @@ class BatsmanBowler:public Players{
             outBatsmans.clear();
 
         }
-        void strikeChange(int runs = 0, int balls = 0 ,string event = ""){
+void BatsmanBowler::strikeChange(int runs, int balls,string event){
             if (runs%2 == 0 && batsman1==onStrike){
                 if (event != "Leg Byes" && event != "Byes" && event != "Wide Ball" && event != "Bowled" && event != "Caught" && event != "LBW" && event != "Stumped" && event != "Hit Wicket" && event != "Retired Hurt" && event != "Retired Out" && event != "OVER UP"&& event != "Run Out"){
                     b1Runs += runs;
@@ -516,8 +459,8 @@ class BatsmanBowler:public Players{
             }
         }
 
-        //  Function to check whether an over has been ended or not
-        bool overUp(int balls){
+//  Function to check whether an over has been ended or not
+bool BatsmanBowler::overUp(int balls){
             if (balls == totalBalls){
                 return true;
             }
@@ -526,8 +469,8 @@ class BatsmanBowler:public Players{
             }
         }
 
-        // Function to change Batsman when Batsman is OUT or HURT
-        void changeBatsman(const string& outBatsman, string type = "OUT"){
+// Function to change Batsman when Batsman is OUT or HURT
+void BatsmanBowler::changeBatsman(const string& outBatsman, string type){
 
             // Updating data of outBatsman
             if (battingTeamPlayers == t1players){
@@ -597,8 +540,8 @@ class BatsmanBowler:public Players{
             }
         }
 
-        // Function to change Bowler on overUp
-        void changeBowler(){
+// Function to change Bowler on overUp
+void BatsmanBowler::changeBowler(){
             string newBowler;
             
             cin.ignore();
@@ -644,12 +587,7 @@ class BatsmanBowler:public Players{
             }
         }
         
-        // Friend Function
-        friend string input(BatsmanBowler&);
-        friend void scoreboard(string , BatsmanBowler&);
-
-        ~BatsmanBowler(){}
-};
+BatsmanBowler::~BatsmanBowler(){}
 
 // INITIALIZING STATIC VARIABLES OF BatsmanBowler CLASS
 int BatsmanBowler::oversThrown = 0;
@@ -1164,9 +1102,6 @@ void scoreboard(string inning, BatsmanBowler& matchDetails){
         if (event != "OVER UP"){
             event = input(matchDetails);
         }
-       
-// // break is Just for trial
-// break;
     }
 
     if (inning == "(INNING : 1)"){
@@ -1209,11 +1144,3 @@ void enteringScoringArea(){
     cout<<endl<<endl<<BRIGHT_WHITE<<BOLD<<"MATCH ENDS !!"<<RESET<<endl<<endl;
 
 }
-
-// ye main fn hatadena
-int main() {
-    enteringScoringArea();
-}
-
-// jo number choice ke liye input le rahe ho use integer ki jagah string kar sakte hai - this file is done
-// agar is file ko aur header files me separate kar sakte hi to kardena, like some general functions like toLowercase and toUpperCase
